@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"/>
+    <title>Person list</title>
+</head>
+
+<body>
+
+<nav th:replace="~{fragment/head.html :: navigation}" class="navbar navbar-expand-lg navbar-light bg-light">
+</nav>
+
+<div class="container">
+    <div class="row py-2">
+        <div class="col-12">
+            <a class="btn btn-primary" th:href="@{/person/new}">Добавить абонента</a>
+        </div>
+        <div class="col-12 mt-3">
+            <form class="form-inline" th:action="@{/person}">
+                <input type="text" class="form-control mb-2 mr-sm-2" th:value="${param.filterSurname}"
+                       id="filterSurname" name="filterSurname" placeholder="Фильтр по фамилии">
+                <input type="text" class="form-control mb-2 mr-sm-2" th:value="${param.filterName}"
+                       id="filterName" name="filterName" placeholder="Фильтр по имени">
+                <input type="text" class="form-control mb-2 mr-sm-2" th:value="${param.filterPatronymic}"
+                       id="filterPatronymic" name="filterPatronymic" placeholder="Фильтр по отчеству">
+                <input type="text" class="form-control mb-2 mr-sm-2" th:value="${param.filterPhone}"
+                       id="filterPhone" name="filterPhone" placeholder="Фильтр по телефону">
+                <button class="btn btn-primary mb-2 mr-sm-2" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+        </div>
+        <div class="col-12">
+            <table class="table table-bordered my-2">
+                <thead>
+                <tr>
+                    <th scope="col">№</th>
+                    <th scope="col">Фамилия</th>
+                    <th scope="col">Имя</th>
+                    <th scope="col">Отчество</th>
+                    <th scope="col">Адрес</th>
+                    <th scope="col">Телефон</th>
+                    <th scope="col">Действия</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${persons.empty}">
+                    <td class="text-center" colspan="5">No data</td>
+                </tr>
+                <tr th:unless="${persons.empty}" th:each="person : ${persons}">
+                    <th scope="row" th:text="${person.id}"></th>
+                    <td th:text="${person.surname}">Surname</td>
+                    <td th:text="${person.firstName}">First name</td>
+                    <td th:text="${person.patronymic}">Patronymic</td>
+                    <td th:text="${person.address}">Address</td>
+                    <td th:text="${person.phones}">Phones</td>
+                    <td>
+                        <a class="btn btn-success" th:href="@{/person/{id}(id = ${person.id})}">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <form class="d-inline" th:method="DELETE" th:action="@{/person/{id}(id=${person.id})}">
+                            <button class="btn btn-danger" type="submit">
+                            <i class="far fa-trash-alt"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="~{fragment/footer.html :: scripts}">
+</th:block>
+
+</body>
+
+</html>

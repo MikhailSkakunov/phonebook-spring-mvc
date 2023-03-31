@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"/>
+    <title>Person</title>
+</head>
+
+<body>
+
+<nav th:replace="~{fragment/head.html :: navigation}" class="navbar navbar-expand-lg navbar-light bg-light">
+</nav>
+
+<div class="container">
+    <div class="row py-2">
+        <div class="col-12">
+            <form th:action="@{/person}" th:object="${person}" th:method="post">
+                <input type="hidden" th:field="*{id}">
+                <div class="form-group">
+                    <label for="surname">Фамилия</label>
+                    <input type="text" th:field="*{surname}" id="surname" class="form-control"  placeholder="Введите фамилию">
+                    <p class="text-danger" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></p>
+                </div>
+                <div class="form-group">
+                    <label for="firstName">Имя</label>
+                    <input type="text" th:field="*{firstName}" id="firstName" class="form-control"  placeholder="Введите имя">
+                    <p class="text-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></p>
+                </div>
+                <div class="form-group">
+                    <label for="patronymic">Отчество</label>
+                    <input type="text" th:field="*{patronymic}" id="patronymic" class="form-control"  placeholder="Введите отчество">
+                    <p class="text-danger" th:if="${#fields.hasErrors('patronymic')}" th:errors="*{patronymic}"></p>
+                </div>
+                <div class="form-group">
+                    <label for="city">Город</label>
+                    <input type="text" th:field="*{city}" id="city" class="form-control"  placeholder="Введите название города">
+                    <p class="text-danger" th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></p>
+                </div>
+                <div class="form-group">
+                    <label for="street">Выбирите название улицы</label>
+                    <select th:field="*{streetId}" id="street" class="form-control">
+                        <option th:each="street : ${streets}"
+                                th:value="${street.id}"
+                                th:text="${street.streetName}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="buildingNumber">Номер дома</label>
+                    <input type="number" th:field="*{buildingNumber}" id="buildingNumber" class="form-control"  placeholder="Введите номер дома">
+                    <p class="text-danger" th:if="${#fields.hasErrors('buildingNumber')}" th:errors="*{buildingNumber}"></p>
+                </div>
+
+                <div class="form-group">
+                <table class="table table-bordered my-2">
+                    <tr>
+                        <th colspan="3">
+                            <button type="submit" name="addPhone" class="btn btn-primary">Добавить телефон</button>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>№</th>
+                        <th>Номер телефона</th>
+                        <th>Тип телефона</th>
+                        <th>Действия</th>
+                    </tr>
+                    <tr th:unless="*{phones.empty}" th:each="phone, phoneStat : *{phones}">
+                        <td th:text="${phoneStat.count}">1</td>
+                        <td>
+                            <input type="hidden" th:field="*{phones[__${phoneStat.index}__].id}">
+                            <input type="text" th:field="*{phones[__${phoneStat.index}__].number}" class="form-control">
+                        </td>
+                        <td>
+                            <select th:field="*{phones[__${phoneStat.index}__].phoneType}" class="form-control">
+                                <option th:each="phType : ${phoneTypes}"
+                                        th:text="${phType.typeName}"
+                                        th:value="${phType.id}">
+                                </option>
+                            </select>
+                        </td>
+                        <td>
+                            <button type="submit" name="removePhone" class="btn btn-danger"
+                                    th:value="${phoneStat.index}">Удалить телефон</button>
+                        </td>
+                    </tr>
+                    <tr th:if="*{phones.empty}">
+                        <td colspan="3">No phones</td>
+                    </tr>
+                </table>
+                </div>
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="~{fragment/footer.html :: scripts}">
+</th:block>
+
+</body>
+
+</html>
