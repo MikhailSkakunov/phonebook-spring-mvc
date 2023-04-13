@@ -126,12 +126,4 @@ public class PersonServiceImpl implements PersonService {
     private static PhoneDto toPhoneDto(Phone phone) {
         return modelMapper.map(phone, PhoneDto.class);
     }
-
-    private static Person toPerson(PersonDto personDto) {
-        return modelMapper.map(personDto, Person.class);
-    }
-
-    private static PersonDto toPersonDTO(Person person) {
-        return modelMapper.map(person, PersonDto.class);
-    }
 }
